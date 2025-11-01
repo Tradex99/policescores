@@ -187,12 +187,19 @@ async function waitForVisibility(locator, timeout = 60000) {
 
     // --- Click first button ---
     const firstButton = page.locator('xpath=/html/body/div[1]/div[1]/div[2]/div[3]/div/div[2]/div/div[1]/div[1]/button');
-    if (await waitForVisibility(firstButton, 15000)) {
-      console.log('Clicking first button...');
-      await firstButton.click();
-    } else {
-      console.warn('First button did not appear.');
-    }
+
+try {
+  // Wait up to 20s for the button to exist in DOM
+  await firstButton.waitFor({ state: 'attached', timeout: 20000 });
+  console.log('First button attached to DOM.');
+
+  // Optionally wait a short moment for it to become visible
+  await firstButton.waitFor({ state: 'visible', timeout: 5000 });
+  console.log('First button is visible — clicking...');
+  await firstButton.click();
+} catch {
+  console.warn('First button did not appear within 20s.');
+}
 
     // --- Wait for modal container ---
 const modalContainer = page.locator('xpath=//div[@role="dialog"]');
