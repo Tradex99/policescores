@@ -209,7 +209,7 @@ if (await waitForVisibility(modalContainer, 30000)) {
     const maxRetries = 2; // already clicked once
     for (let i = 1; i <= maxRetries; i++) {
       console.log(`Waiting 20s before retry #${i}...`);
-      await page.waitForTimeout(20000);
+      await page.waitForTimeout(30000);
 
       const count = await modalButton.count();
       if (count === 0) {
