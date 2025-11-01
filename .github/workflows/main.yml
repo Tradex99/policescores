@@ -1,1 +1,43 @@
+name: reward
 
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Google dependencies
+        working-directory: google
+        run: |
+          npm install playwright
+          npx playwright install firefox
+          python -m pip install --upgrade pip
+          python -m pip install requests
+
+      - name: Run Google runner.js with Xvfb
+        working-directory: google
+        run: |
+          xvfb-run -a node runner.js
