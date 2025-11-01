@@ -186,14 +186,14 @@ async function waitForVisibility(locator, timeout = 60000) {
     await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // --- Click first button ---
-    const firstButton = page.locator('xpath=/html/body/div[1]/div[1]/div[2]/div[3]/div/div[2]/div/div[1]/div[1]/button');
+const firstButton = page.locator('button.harmony-o8n1vb');
 
 try {
-  // Wait up to 20s for the button to exist in DOM
+  // Wait up to 20s for the button to exist in the DOM
   await firstButton.waitFor({ state: 'attached', timeout: 20000 });
   console.log('First button attached to DOM.');
 
-  // Optionally wait a short moment for it to become visible
+  // Wait up to 5s for it to become visible
   await firstButton.waitFor({ state: 'visible', timeout: 5000 });
   console.log('First button is visible — clicking...');
   await firstButton.click();
